@@ -1,0 +1,27 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="tef_banpro_app.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="T1" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="T2" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="T3" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="T4" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="T5" Type="System.Boolean" Scope="Application">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="P1" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">BANPRO</Value>
+    </Setting>
+    <Setting Name="LicensingServiceUrl" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">9SDAZkdhzo29PN0f+xeOGzzYdZMZsIvIGFP7hHN18FJXDC3TtmJRiuX7SJ2eehJhR6jDpFqaQ/g=</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
