@@ -54,11 +54,6 @@ namespace tef_banpro_app
         public static readonly byte[] SettlementReport = { 0x00, 0x06 };
 
         /// <summary>
-        /// Nombre del archivo de licencia
-        /// </summary>
-        public static string LicenseFileName = "TEF_BanproDCL.lic";
-
-        /// <summary>
         /// The API connection string
         /// </summary>
         public static string ConnectionString = @"Server={0};Database={1};User Id={2};Password={3};MultipleActiveResultSets=True;Connection Timeout=5";
@@ -77,5 +72,14 @@ namespace tef_banpro_app
         /// Identificador de la base de datos de gestion
         /// </summary>
         public static int CompanyId;
+
+        /// <summary>
+        /// Tipo de aplicación (ICG)
+        /// </summary>
+        public static class IcgTipoApp
+        {
+            public const string MgrFrtFht = "0";
+            public const string Frs = "1";
+        }
     }
 }

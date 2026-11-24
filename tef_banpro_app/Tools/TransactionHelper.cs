@@ -50,8 +50,9 @@ namespace tef_banpro_app.Tools
         /// </summary>
         /// <param name="serie"></param>
         /// <param name="numero"></param>
+        /// <param name="icgTipoApp"></param>
         /// <returns></returns>
-        public static TransaccionVenta GetTransaccionVenta(string serie, int numero)
+        public static TransaccionVenta GetTransaccionVenta(string serie, int numero, string icgTipoApp)
         {
             try
             {
@@ -62,9 +63,21 @@ namespace tef_banpro_app.Tools
                     using (var cmd = con.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = @"SELECT  TOP(1) TOTALNETO, TOTALIMPUESTOS, DTOCOMERCIAL 
-                                            FROM    dbo.FACTURASVENTA
-                                            WHERE   NUMSERIE = @NUMSERIE AND NUMFACTURA = @NUMFACTURA AND N = 'B'";
+                        cmd.CommandText = icgTipoApp == Global.IcgTipoApp.MgrFrtFht 
+                            ? @"SELECT  TOP(1) TOTALNETO, 
+                                        TOTALIMPUESTOS, 
+                                        DTOCOMERCIAL 
+                                FROM    dbo.FACTURASVENTA
+                                WHERE   NUMSERIE = @NUMSERIE
+                                        AND NUMFACTURA = @NUMFACTURA 
+                                        AND N = 'B'" 
+                            : @"SELECT	SUM(TOTAL) AS TOTALNETO, 
+		                                SUM(TOTIVA + TOTREQ) AS TOTALIMPUESTOS, 
+		                                SUM(TOTDTOCOMERC) AS DTOCOMERCIAL
+                                FROM	dbo.TIQUETSTOT
+                                WHERE	SERIE = @NUMSERIE
+		                                AND NUMERO = @NUMFACTURA
+		                                AND N = 'B'";
 
                         cmd.Parameters.AddWithValue("@NUMSERIE", serie);
                         cmd.Parameters.AddWithValue("@NUMFACTURA", numero);
@@ -102,8 +115,9 @@ namespace tef_banpro_app.Tools
         /// <param name="numero"></param>
         /// <param name="posicion"></param>
         /// <param name="referencia"></param>
+        /// <param name="icgTipoApp"></param>
         /// <returns></returns>
-        public static TransaccionVenta GetTransaccionVenta(string serie, int numero, int posicion, string referencia)
+        public static TransaccionVenta GetTransaccionVenta(string serie, int numero, int posicion, string referencia, string icgTipoApp)
         {
             try
             {
@@ -114,9 +128,19 @@ namespace tef_banpro_app.Tools
                     using (var cmd = con.CreateCommand())
                     {
                         cmd.CommandType = CommandType.Text;
-                        cmd.CommandText = @"SELECT IMPORTE
-                                            FROM dbo.TESORERIA
-                                            WHERE SERIE = @SERIE AND NUMERO = @NUMERO AND POSICION = @POSICION AND NUMTXNTEF = @NUMTXNTEF";
+                        cmd.CommandText = icgTipoApp == Global.IcgTipoApp.MgrFrtFht 
+                            ? @"SELECT  TOP(1) IMPORTE
+                                FROM    dbo.TESORERIA
+                                WHERE   SERIE = @SERIE 
+                                        AND NUMERO = @NUMERO 
+                                        AND POSICION = @POSICION 
+                                        AND NUMTXNTEF = @NUMTXNTEF" 
+                            : @"SELECT  TOP(1) IMPORTE
+                                FROM    dbo.TIQUETSPAG
+                                WHERE   SERIE = @SERIE
+                                        AND NUMERO = @NUMERO 
+                                        AND NUMLINEA = @POSICION 
+                                        AND NUMTXNTEF = @NUMTXNTEF";
 
                         cmd.Parameters.AddWithValue("@SERIE", serie);
                         cmd.Parameters.AddWithValue("@NUMERO", numero);

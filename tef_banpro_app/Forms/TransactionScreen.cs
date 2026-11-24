@@ -208,7 +208,7 @@ namespace tef_banpro_app.Forms
                 if (Global.ConfigurationSettings.RegionalSettings.ReportarImpuestos)
                 {
                     // Obtener el total neto del documento desde la base de datos
-                    var transaccion = TransactionHelper.GetTransaccionVenta(_transaction.Peticion.Serie, Convert.ToInt32(_transaction.Peticion.NumTicket));
+                    var transaccion = TransactionHelper.GetTransaccionVenta(_transaction.Peticion.Serie, Convert.ToInt32(_transaction.Peticion.NumTicket), _transaction.Peticion.IcgTipoApp);
                     if (transaccion == null)
                     {
                         var mensaje = "Error obteniendo los datos adicionales de la transacción de venta.";
@@ -251,8 +251,8 @@ namespace tef_banpro_app.Forms
 
                 if (_dclTransactionType == DclTransactionTypes.Sale)
                 {
-                    if (_formaPago.AcquirerId != -1) dcl.setAcquirerId(_formaPago.AcquirerId);
-                    if (_formaPago.MerchantId != -1) dcl.setMerchantId(_formaPago.MerchantId);
+                    dcl.setAcquirerId(_formaPago.AcquirerId != -1 ? _formaPago.AcquirerId : 0);
+                    dcl.setMerchantId(_formaPago.MerchantId != -1 ? _formaPago.MerchantId : 0);
                     dcl.setCurrency(_moneda);
 
                     if (Global.ConfigurationSettings.RegionalSettings.ReportarImpuestos)
@@ -268,8 +268,8 @@ namespace tef_banpro_app.Forms
                 }
                 else if (_dclTransactionType == DclTransactionTypes.Points)
                 {
-                    if (_formaPago.AcquirerId != -1) dcl.setAcquirerId(_formaPago.AcquirerId);
-                    if (_formaPago.MerchantId != -1) dcl.setMerchantId(_formaPago.MerchantId);
+                    dcl.setAcquirerId(_formaPago.AcquirerId != -1 ? _formaPago.AcquirerId : 0);
+                    dcl.setMerchantId(_formaPago.MerchantId != -1 ? _formaPago.MerchantId : 0);
                     dcl.setCurrency(_moneda);
                     
                     if (Global.ConfigurationSettings.RegionalSettings.ReportarImpuestos)
@@ -310,8 +310,8 @@ namespace tef_banpro_app.Forms
                     #endregion
 
                     dcl. setTelephoneNumber(phoneScreen.Telefono);
-                    if (_formaPago.AcquirerId != -1) dcl.setAcquirerId(_formaPago.AcquirerId);
-                    if (_formaPago.MerchantId != -1) dcl.setMerchantId(_formaPago.MerchantId);
+                    dcl.setAcquirerId(_formaPago.AcquirerId != -1 ? _formaPago.AcquirerId : 0);
+                    dcl.setMerchantId(_formaPago.MerchantId != -1 ? _formaPago.MerchantId : 0);
                     dcl.setPayphoneRetries(4);
                     dcl.setCurrency(_moneda);
                     
@@ -328,8 +328,8 @@ namespace tef_banpro_app.Forms
                 }
                 else if (_dclTransactionType == DclTransactionTypes.Extrafinancing)
                 {
-                    if (_formaPago.AcquirerId != -1) dcl.setAcquirerId(_formaPago.AcquirerId);
-                    if (_formaPago.MerchantId != -1) dcl.setMerchantId(_formaPago.MerchantId);
+                    dcl.setAcquirerId(_formaPago.AcquirerId != -1 ? _formaPago.AcquirerId : 0);
+                    dcl.setMerchantId(_formaPago.MerchantId != -1 ? _formaPago.MerchantId : 0);
                     dcl.setCurrency(_moneda);
                     
                     if (Global.ConfigurationSettings.RegionalSettings.ReportarImpuestos)
@@ -348,8 +348,8 @@ namespace tef_banpro_app.Forms
                 }
                 else if (_dclTransactionType == DclTransactionTypes.Intrafinancing)
                 {
-                    if (_formaPago.AcquirerId != -1) dcl.setAcquirerId(_formaPago.AcquirerId);
-                    if (_formaPago.MerchantId != -1) dcl.setMerchantId(_formaPago.MerchantId);
+                    dcl.setAcquirerId(_formaPago.AcquirerId != -1 ? _formaPago.AcquirerId : 0);
+                    dcl.setMerchantId(_formaPago.MerchantId != -1 ? _formaPago.MerchantId : 0);
                     dcl.setCurrency(_moneda);
                     
                     if (Global.ConfigurationSettings.RegionalSettings.ReportarImpuestos)
@@ -467,7 +467,7 @@ namespace tef_banpro_app.Forms
                     var responseCode = dclResult.GetValue_ASCII2String(0);
                     if (responseCode == "00")
                     {
-                        // Procesar la respusta
+                        // Procesar la respuesta
                         SuccessfulTransaction(_dclTransactionType, dclResult, taxAmount);
                     }
                     else if (dcl.DCL_ResponseCode == DclResponseCodes.Duplicate)
@@ -603,7 +603,8 @@ namespace tef_banpro_app.Forms
 
                 #region Validar que el importe no sea parcial
 
-                var transaccion = TransactionHelper.GetTransaccionVenta(_transaction.Peticion.SerieAbono, Convert.ToInt32(_transaction.Peticion.NumeroAbono), Convert.ToInt32(_transaction.Peticion.NumLinPago), invoice);
+                var transaccion = TransactionHelper.GetTransaccionVenta(_transaction.Peticion.SerieAbono, Convert.ToInt32(_transaction.Peticion.NumeroAbono), Convert.ToInt32(_transaction.Peticion.NumLinPago), 
+                    invoice, _transaction.Peticion.IcgTipoApp);
                 if (transaccion == null)
                 {
                     UnsuccessfulTransaction("-1", $@"No es posible procesar la transacción de anulación.{Environment.NewLine}Ocurrió un error al intentar recuperar los datos de la transacción de venta original.");
